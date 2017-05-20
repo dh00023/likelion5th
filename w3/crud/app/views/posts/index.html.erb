@@ -1,0 +1,6 @@
+<h2><a href="/posts/new">새글쓰러가기</a></h2>
+<h1>지금 까지 작성된 파일들 입니다.</h1>
+
+<% @posts.each do |p| %>
+	<h3><a href="/posts/show/<%=p.id%>"><%= p.title %></a></h3>
+<% end %>

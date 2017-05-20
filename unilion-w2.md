@@ -31,3 +31,8 @@ xl > lg > md > sm 순이다
 #### bootstrap templete
 
 - [StartBootstrap](https://startbootstrap.com/)
+
+## Form 태그
+
+HTML/CSS 할 때 W3School을 참조하는게 좋다.
+
