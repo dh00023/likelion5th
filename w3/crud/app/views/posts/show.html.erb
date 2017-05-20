@@ -3,5 +3,6 @@
 <h2>제목 : <%= @post.title %></h2>
 <p>내용 : <%= @post.content %></p>
 
-<a href="/posts/destroy/<%=@post.id%>" data-confirm= "삭제하시겠습니까?">삭제하기</a>
+<a href="/posts/destroy/<%=@post.id%>" data-confirm= "삭제하시겠습니까?" data-method="destroy">삭제하기</a>
 <a href="/">목록으로가기</a>
+<a href="/posts/edit/<%=@post.id%>">수정하기</a>

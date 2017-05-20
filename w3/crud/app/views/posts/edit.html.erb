@@ -1,0 +1,10 @@
+<h1><%= @post.id%>번째 수정 post입니다.</h1>
+<form action="/posts/update/<%= @post.id%>" method="post">
+	<p>제목</p>
+	<input type="text" name="input_title" value="<%= @post.title %>">
+	<p>내용</p>	
+	<input type="text" name="input_content" value="<%=@post.content%>">
+	<input type="submit" value="제출">
+</form>
+<a href="/posts/show/<%=@post.id%>">뒤로가기</a>
+<a href="/">목록으로가기</a>

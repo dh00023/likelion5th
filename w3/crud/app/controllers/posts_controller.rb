@@ -13,24 +13,45 @@ class PostsController < ApplicationController
 		@post.content = params[:input_content]
 		@post.save
 
-		redirect_to "/posts/new/#{@post.id}"
+		redirect_to "/posts/show/#{@post.id}"
 	end
 
 	# read
 	def show
+		# 한개으 ㅣ포스트를 보여주는 view
 		@post = Post.find(params[:post_id])
 	end
 
 	def index
+		# 모든 포스트를 보여주는 view
 		@posts = Post.all
+	end
+
+	# update
+
+	def edit
+		# 사용자가 수정하는 페이지
+		@post = Post.find(params[:post_id])
+	end
+
+	def update	
+		# 수정
+		@post = Post.find(params[:post_id])
+		@post.title = params[:input_title]
+		@post.content = params[:input_content]
+		@post.save
+
+		redirect_to "/posts/show/#{@post.id}"
 	end
 
 	# destroy
 
 	def destroy
+		# 한개의 포스트를 삭제하는 액션
 		@post = Post.find(params[:post_id])
 		@post.destroy
 
 		redirect_to '/'
 	end
+
 end
