@@ -8,3 +8,6 @@
 ## Gem
 
 `gem rails_db`를 설치 후 `http://localhost:3000/rails/db`라 주소창에 치면 db와 관련된 정보가 나온다.
+
+#### CRUD
+#### 1:N 관계

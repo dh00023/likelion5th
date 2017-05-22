@@ -1,8 +1,20 @@
-<h1><%= @post.id%>번째 기post입니다.</h1>
+<h1><%= @post.id%>번째 post입니다.</h1>
 
 <h2>제목 : <%= @post.title %></h2>
 <p>내용 : <%= @post.content %></p>
-
 <a href="/posts/destroy/<%=@post.id%>" data-confirm= "삭제하시겠습니까?" data-method="destroy">삭제하기</a>
 <a href="/">목록으로가기</a>
 <a href="/posts/edit/<%=@post.id%>">수정하기</a>
+
+<hr>
+
+<form method="post" action="/posts/show/<%=@post.id%>/comments/create">
+	<input type="text" name="input_comment">
+	<input type="submit" value="댓글달기"> 
+</form>
+
+<% @post.comments.each do |c| %>
+	<p> <%= c.content %> <a href="/posts/show/<%=@post.id%>/comments/destroy/<%=c.id%>" data-method="destroy">댓글삭제</a></p>
+<% end %>
+
+

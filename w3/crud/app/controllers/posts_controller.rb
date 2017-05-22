@@ -20,6 +20,7 @@ class PostsController < ApplicationController
 	def show
 		# 한개으 ㅣ포스트를 보여주는 view
 		@post = Post.find(params[:post_id])
+		# @commnets = Comment.where(Lpost_id => params[:post_id])
 	end
 
 	def index
