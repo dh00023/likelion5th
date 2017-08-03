@@ -1,0 +1,4 @@
+<% @posts.each do |post| %>
+	<p><%=post.id%> <%=post.title%></p>
+<% end %>
+<%= paginate @posts %>
