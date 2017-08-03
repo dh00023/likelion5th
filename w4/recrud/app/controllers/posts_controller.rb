@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   end
 
   def new
+    @post=Post.new
   end
 
   def show
@@ -15,7 +16,7 @@ class PostsController < ApplicationController
     # @post.title = params[:title]
     # @post.contnet = params[:contnet]
     # @post.save
-    Post.create(title: params[:title], content: params[:content])
+    Post.create(title: params[:post][:title], content: params[:post][:content])
     redirect_to posts_path # method Get
   end
 
@@ -25,7 +26,7 @@ class PostsController < ApplicationController
 
   def update
     @post = Post.find(params[:id])
-    @post.update_attributes(title: params[:title], content: params[:content])
+    @post.update_attributes(title: params[:post][:title], content: params[:post][:content])
     redirect_to '/posts'
   end
 

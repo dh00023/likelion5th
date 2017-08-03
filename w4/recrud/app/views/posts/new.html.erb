@@ -1,5 +1,5 @@
-<%= form_tag '/posts',method: 'post' do%>
-	<%= text_field_tag 'title' %>
-	<%= text_area_tag 'content' %>
-	<%= submit_tag 'submit!' %>
+<%= form_for @post do |f| %>
+	<%= f.text_field 'title' %>
+	<%= f.text_area 'content' %>
+	<%= f.submit 'submit' %>
 <% end %>

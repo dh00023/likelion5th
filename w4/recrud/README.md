@@ -70,6 +70,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
 ```
+
+`as`로 Helper path를 지정해줬다.
+
 |method|uri|Controller#Action|설명|
 |:------:|:------:|:------:|:------:|
 | get | /posts |posts#index| 우리가 쓴 글을 다 볼 수 있는 페이지|
@@ -162,4 +165,65 @@ end
 <%= @post.content %>
 <%= link_to '이 글 보기','/posts/#{post.id}' %>
 <%= link_to 'Back',:back%>
+```
+
+## 6. CRUD Final
+URI를 Helper로 변경할 수 있다.
+
+모델이랑 연동하는 것은 `form_for`를 사용하면된다.
+```erb
+<!-- new.html.erb -->
+<!-- edit.html.erb -->
+<%= form_for @post do |f| %>
+	<%= f.text_field 'title' %>
+	<%= f.text_area 'content' %>
+	<%= f.submit 'submit' %>
+<% end %>
+```
+```ruby
+class PostsController < ApplicationController
+  def index
+    @posts=Post.all
+  end
+
+  def new
+    @post=Post.new
+  end
+
+  def show
+    @post = Post.find(params[:id])
+  end
+  
+  def create
+    # @post = Post.new
+    # @post.title = params[:title]
+    # @post.contnet = params[:contnet]
+    # @post.save
+    Post.create(title: params[:post][:title], content: params[:post][:content])
+    redirect_to posts_path # method Get
+  end
+
+  def edit
+    @post = Post.find(params[:id])
+  end
+
+  def update
+    @post = Post.find(params[:id])
+    @post.update_attributes(title: params[:post][:title], content: params[:post][:content])
+    redirect_to '/posts'
+  end
+
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+    redirect_to '/'
+  end
+end
+```
+```ruby
+Rails.application.routes.draw do
+  # RESTful한 페이지
+
+  resources 'posts'
+end
 ```
