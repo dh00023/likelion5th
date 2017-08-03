@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   # RESTful한 페이지
 
   # Resource: posts
-
+  root 'posts#index'
   # 우리가 쓴 글을 다 볼 수 있는 페이지
   get '/posts'=>'posts#index'
   # 우리가 새 글을 쓰는 페이지
@@ -59,9 +59,9 @@ Rails.application.routes.draw do
   # 새 글을 받는 페이지(create)
   post '/posts'=>'posts#create'
   # 특정 글을 보는 페이지
-  get '/posts/:id'=>'posts#show'
+  get '/posts/:id'=>'posts#show', as: "post"
   # 글을 수정하는 페이지
-  get '/posts/:id/edit'=>'posts#edit'
+  get '/posts/:id/edit'=>'posts#edit', as: "edit_post"
   # 글을 수정 완료하는 페이지
   put '/posts/:id'=>'posts#update'
   patch '/posts/:id'=>'posts#update'
@@ -81,3 +81,85 @@ end
 | patch |/posts/:id|posts#update| 글을 수정 완료하는 페이지|
 | delete| /posts/:id|posts#destroy| 특정 글을 삭제하는 페이지|
 
+## 5. CRUD
+
+URI를 쓸때 `#{}`코드가 쓰인다면 `""`안에 작성해야한다.
+
+```ruby
+class PostsController < ApplicationController
+  def index
+    @posts=Post.all
+  end
+
+  def new
+  end
+
+  def show
+    @post = Post.find(params[:id])
+  end
+  
+  def create
+    # @post = Post.new
+    # @post.title = params[:title]
+    # @post.contnet = params[:contnet]
+    # @post.save
+    Post.create(title: params[:title], content: params[:content])
+    redirect_to posts_path # method Get
+  end
+
+  def edit
+    @post = Post.find(params[:id])
+  end
+
+  def update
+    @post = Post.find(params[:id])
+    @post.update_attributes(title: params[:title], content: params[:content])
+    redirect_to '/posts'
+  end
+
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+    redirect_to '/'
+  end
+end
+```
+```erb
+<!-- new.html.erb-->
+<%= form_tag '/posts',method: 'post' do%>
+	<%= text_field_tag 'title' %>
+	<%= text_area_tag 'content' %>
+	<%= submit_tag 'submit!' %>
+<% end %>
+```
+```erb
+<!-- index.html.erb -->
+<% @posts.each do |post| %>
+	<div>
+		<%= post.id %>
+		<%= post.title %>
+		<%= post.content %>
+		<%= link_to '이 글 보기',"/posts/#{post.id}" %>
+		<%= link_to '수정하기',edit_post_url(id: post.id) %>
+		<%= link_to '삭제하기',"/posts/#{post.id}",method: 'delete',data: {confirm: "정말 삭제하실 건가요?"} %> 
+	</div>
+<% end %>
+
+<%= link_to  '새 글쓰기','/posts/new' %>
+```
+```erb
+<!--show.html.erb-->
+<%= @post.id %>
+<%= @post.title %>
+<%= @post.content %>
+<%= link_to '이 글 보기','/posts/#{post.id}' %>
+<%= link_to 'Back',:back%>
+```
+```erb
+<!-- edit.html.erb -->
+<%= @post.id %>
+<%= @post.title %>
+<%= @post.content %>
+<%= link_to '이 글 보기','/posts/#{post.id}' %>
+<%= link_to 'Back',:back%>
+```
