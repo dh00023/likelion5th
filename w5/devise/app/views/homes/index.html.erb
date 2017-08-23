@@ -27,3 +27,9 @@
 <br>
 
 <%= link_to 'New Home', new_home_path %>
+<% if user_signed_in? %>
+  <%= link_to 'Sign out', destroy_user_session_path, method: 'delete' %>
+<% else %>
+  <%= link_to '로그인', new_user_session_path %>
+  <%= link_to '회원가입', new_user_registration_path %>
+<% end %>
