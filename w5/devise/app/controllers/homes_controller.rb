@@ -1,5 +1,6 @@
 class HomesController < ApplicationController
   before_action :set_home, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /homes
   # GET /homes.json
@@ -15,6 +16,7 @@ class HomesController < ApplicationController
   # GET /homes/new
   def new
     @home = Home.new
+    authorize! :write, @home
   end
 
   # GET /homes/1/edit

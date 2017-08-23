@@ -100,3 +100,124 @@ $ rails g devise:i18n:locale ko
       create  config/locales/devise.views.ko.yml
 ```
 한국어 버전의 devise view가 생성된다.
+
+
+# cancancan (권한 부여), rolify (역할, 등급을 부여)
+- [cancancan](https://github.com/CanCanCommunity/cancancan)
+- [rolify](https://github.com/RolifyCommunity/rolify)
+
+### Gemfile
+```
+gem 'cancancan'
+gem 'rolify'
+```
+```
+$ bundle install
+```
+
+```
+$ rails generate cancan:ability
+      create  app/models/ability.rb
+```
+```
+$ rails generate rolify Role User
+      invoke  active_record
+      create    app/models/role.rb
+      invoke    test_unit
+      create      test/models/role_test.rb
+      create      test/fixtures/roles.yml
+      insert    app/models/role.rb
+      create    db/migrate/20170823064501_rolify_create_roles.rb
+      insert  app/models/user.rb
+      create  config/initializers/rolify.rb
+```
+```
+$ rails db:migrate
+```
+
+### 모델 관계 설정
+```ruby
+class Home < ApplicationRecord
+	belongs_to :user
+end
+```
+```ruby
+class User < ApplicationRecord
+  has_many :posts
+  rolify
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+end
+```
+```
+$ rails g migration AddUserIdToHomes user_id:integer
+```
+
+### 권한부여(Cancancan 사용법)
+```ruby
+# ability.rb
+class Ability
+  include CanCan::Ability
+
+  def initialize(user)
+    # Define abilities for the passed in user here. For example:
+    #
+      user ||= User.new # guest user (not logged in)
+      if user.nil?
+        can :read, :all
+      else
+        can [:read,:write], :all
+      end
+    #
+  end
+end
+```
+```ruby
+# homes_controller
+  def new
+    @home = Home.new
+    authorize! :write, @home
+  end
+```
+```ruby
+# home.rb
+	resourcify
+```
+
+### rolify사용
+
+```
+$ User.first.add_role 'admin'   
+$ User.first.has_role? 'admin'
+```
+
+```ruby
+class Ability
+  include CanCan::Ability
+
+  def initialize(user)
+    # Define abilities for the passed in user here. For example:
+    #
+    # user ||= User.new # guest user (not logged in)
+      if user.nil?
+        can :read, :all
+      elsif user.has_role? 'newbi'
+        can [:read,:create], :all
+        can [:update,:destroy], Home, user_id: user.id
+      elsif user.has_role? 'manager'
+        can [:read,:create,:update], :all
+        can :destroy, Home, user_id: user.id
+      elsif user.has_role? 'admin'
+        can [:read,:create,:update,:destroy], :all
+      end
+
+  end
+end
+```
+```ruby
+# homes_controller
+load_and_authorize_resource
+```
+(read,create,update,destroy)에 한해서 자동으로 권한이 어떤 액션에 속하는지 지정이되어있다.

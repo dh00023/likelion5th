@@ -27,6 +27,7 @@
 <br>
 
 <%= link_to 'New Home', new_home_path %>
+<!-- current_user.nil? 도 같은 표현-->
 <% if user_signed_in? %>
   <%= link_to 'Sign out', destroy_user_session_path, method: 'delete' %>
 <% else %>
