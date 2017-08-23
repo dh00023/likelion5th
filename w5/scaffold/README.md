@@ -1,6 +1,5 @@
 # Scaffold
 
-
 ```
 rails g scaffold Post title content:text
 ````
